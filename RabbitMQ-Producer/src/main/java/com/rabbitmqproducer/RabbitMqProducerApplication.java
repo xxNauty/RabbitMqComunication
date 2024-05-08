@@ -9,7 +9,6 @@ import com.rabbitmqproducer.entity.User;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.nio.charset.StandardCharsets;
@@ -26,18 +25,6 @@ public class RabbitMqProducerApplication {
         SpringApplication.run(RabbitMqProducerApplication.class, args);
     }
 
-//    @GetMapping("/send/{message}")
-//    public void sendMessage(@PathVariable String message) throws Exception {
-//        ConnectionFactory factory = new ConnectionFactory();
-//        factory.setHost("localhost");
-//        try (Connection connection = factory.newConnection();
-//             Channel channel = connection.createChannel()) {
-//            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-//            channel.basicPublish("", QUEUE_NAME, null, message.getBytes(StandardCharsets.UTF_8));
-//            System.out.println(" [x] Sent: '" + message + "'");
-//        }
-//    }
-
     @GetMapping("/send/data")
     public void sendSomeData() throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -45,6 +32,7 @@ public class RabbitMqProducerApplication {
 
         int random = new Random().nextInt(10);
         String message, queueName;
+
         if(random % 3 == 0) {
             User user = new User(1, "Jan", 21);
             message = new Gson().toJson(user);
@@ -55,8 +43,6 @@ public class RabbitMqProducerApplication {
             message = new Gson().toJson(dog);
             queueName = DOG_QUEUE;
         }
-
-
 
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {

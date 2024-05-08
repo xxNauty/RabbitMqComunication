@@ -5,19 +5,19 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.DeliverCallback;
-import com.rabbitmqconsumer.entity.Dog;
+import com.rabbitmqconsumer.entity.Cat;
 import lombok.SneakyThrows;
 
 import java.nio.charset.StandardCharsets;
 
-public class DogConsumer implements Runnable {
+public class CatConsumer implements Runnable {
 
-    private final static String QUEUE_NAME = "dog_queue";
+    private final static String QUEUE_NAME = "cat_queue";
 
     @SneakyThrows
     @Override
     public void run() {
-        System.out.println("dog consumer started");
+        System.out.println("cat consumer started");
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
@@ -28,8 +28,8 @@ public class DogConsumer implements Runnable {
         DeliverCallback deliverCallback = (consumerTag, delivery) -> {
             String message = new String(delivery.getBody(), StandardCharsets.UTF_8);
             System.out.print(" [x] Received message: ");
-            Dog dog = new Gson().fromJson(message, Dog.class);
-            System.out.println(dog.toString());
+            Cat cat = new Gson().fromJson(message, Cat.class);
+            System.out.println(cat.toString());
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
     }

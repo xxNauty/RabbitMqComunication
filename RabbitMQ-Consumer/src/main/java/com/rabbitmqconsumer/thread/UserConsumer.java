@@ -17,6 +17,7 @@ public class UserConsumer implements Runnable {
     @SneakyThrows //w pewnym stopniu zastępuje try...catch
     @Override
     public void run() {
+        System.out.println("user consumer started");
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
         Connection connection = factory.newConnection();
@@ -29,13 +30,15 @@ public class UserConsumer implements Runnable {
             System.out.print(" [x] Received message: ");
             User user = new Gson().fromJson(message, User.class);
             System.out.println(user.toString());
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
 
     }
+
+
 }
